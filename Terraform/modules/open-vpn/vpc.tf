@@ -8,7 +8,7 @@
 #########
 resource "aws_vpc" "dedicated-vpc" {
   count                = var.vpc_id == null ? 1 : 0
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = "192.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
   instance_tenancy     = "default"
@@ -31,7 +31,7 @@ resource "aws_internet_gateway" "dedicated-igw" {
 resource "aws_subnet" "dedicated-subnet" {
   count                   = var.public_subnet_id == null ? 1 : 0
   vpc_id                  = var.vpc_id == null ? "${aws_vpc.dedicated-vpc[0].id}" : var.vpc_id
-  cidr_block              = "10.0.1.0/28"
+  cidr_block              = "192.0.1.0/28"
   map_public_ip_on_launch = true //it makes this a public subnet
   availability_zone       = var.availability_zone != null ? "${var.availability_zone}" : var.region != null ? "${var.region}a" : "${data.aws_region.current.name}a"
   tags                    = merge(var.tags, { Name = "${var.env}.dedicated_for_vpn.ps" })

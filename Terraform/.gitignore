@@ -4,7 +4,10 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
-
+.terraform.lock.hcl
+modules/vpc-peering/.terraform.lock.hcl
+modules/vpc-peering/vars/
+**/var/**
 # Crash log files
 crash.log
 

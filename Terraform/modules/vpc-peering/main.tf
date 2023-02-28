@@ -19,15 +19,6 @@
 ############################
 ## VPC Peering Connection ##
 ############################
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.26"
-      configuration_aliases = [ aws.accepter, aws.requester ]
-    }
-  }
-}
 # Taken from: https://awstip.com/aws-multi-region-vpc-peering-using-terraform-a0b8aabf084b
 resource "aws_vpc_peering_connection" "this" {
   vpc_id      = var.requester_vpc_id
@@ -45,12 +36,20 @@ resource "aws_vpc_peering_connection_accepter" "this" {
   tags                      = merge(var.tags, { Side = "accepter" })
 }
 
-resource "aws_vpc_peering_connection_options" "this" {
+resource "aws_vpc_peering_connection_options" "accepter_peering_options" {
   vpc_peering_connection_id = aws_vpc_peering_connection.this.id
   accepter {
     allow_remote_vpc_dns_resolution = true
   }
   provider = aws.accepter
+}
+
+resource "aws_vpc_peering_connection_options" "requester_peering_options" {
+  vpc_peering_connection_id = aws_vpc_peering_connection.this.id
+  requester {
+    allow_remote_vpc_dns_resolution = true
+  }
+  provider = aws.requester
 }
 
 locals {
