@@ -24,7 +24,7 @@ variable "requester_route_tables_ids" {
 }
 
 variable "tags" {
-  type        = object({})
+  type        = map(string)
   description = "describe your variable"
-  default     = {}
+  default = {}
 }

@@ -55,6 +55,6 @@ resource "aws_vpc_peering_connection_options" "requester_peering_options" {
 }
 
 locals {
-  requester_route_tables_ids = var.requester_route_tables_ids == [] ? data.aws_route_tables.requester.ids : var.requester_route_tables_ids
-  accepter_route_tables_ids  = var.accepter_route_tables_ids == [] ? data.aws_route_tables.accepter.ids : var.accepter_route_tables_ids
+  requester_route_tables_ids = length(var.requester_route_tables_ids) > 0 ? var.requester_route_tables_ids : data.aws_route_tables.requester.ids
+  accepter_route_tables_ids  = length(var.accepter_route_tables_ids) > 0 ? var.accepter_route_tables_ids : data.aws_route_tables.accepter.ids
 }

@@ -7,11 +7,14 @@
 ## Routes ##
 ############
 data "aws_vpc" "accepter" {
-  id       = var.accpeter_vpc_id
+  count = length(var.accpeter_vpc_id) > 0 : var.accpeter_vpc_id : 0
   provider = aws.accepter
+
+  id       = var.accpeter_vpc_id
 }
 
 data "aws_route_tables" "accepter" {
+  count = length(var.accpeter_vpc_id) > 0 : var.accpeter_vpc_id : 0
   provider = aws.accepter
 
   vpc_id   = var.accpeter_vpc_id
@@ -24,12 +27,14 @@ data "aws_route_tables" "accepter" {
 }
 
 data "aws_vpc" "requester" {
+  count = length(var.requester_vpc_id) > 0 : var.requester_vpc_id : 0
   provider = aws.requester
 
   id       = var.requester_vpc_id
 }
 
 data "aws_route_tables" "requester" {
+  count = length(var.requester_vpc_id) > 0 : var.requester_vpc_id : 0
   provider = aws.requester
 
   vpc_id   = var.requester_vpc_id
@@ -47,19 +52,19 @@ data "aws_availability_zones" "available" {
 }
 
 output "accpeter_vpc" {
-  value = data.aws_vpc.accepter.*
+  value = coalesce(data.aws_vpc.accepter.*, )
 }
 
 output "accpeter_rt" {
-  value = data.aws_route_tables.accepter.ids
+  value = coalesce(data.aws_route_tables.accepter.ids, )
 }
 
 
 output "requester_vpc" {
-  value = data.aws_vpc.requester.*
+  value = coalesce(data.aws_vpc.requester.*, )
 }
 
 
 output "requester_rt" {
-  value = data.aws_route_tables.accepter.ids
+  value = coalesce(data.aws_route_tables.accepter.ids, )
 }

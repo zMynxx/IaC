@@ -8,6 +8,9 @@
 modules/vpc-peering/.terraform.lock.hcl
 modules/vpc-peering/vars/
 **/var/**
+bak/
+default.vpn-access-server.kp.pem
+vars/
 # Crash log files
 crash.log
 
