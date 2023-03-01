@@ -12,18 +12,33 @@ data "aws_vpc" "accepter" {
 }
 
 data "aws_route_tables" "accepter" {
-  vpc_id   = var.accpeter_vpc_id
   provider = aws.accepter
+
+  vpc_id   = var.accpeter_vpc_id
+  # lifecycle {
+  #   precondition {
+  #     condition     = var.accepter_route_tables_ids == []
+  #     error_message = "The number of instances (ERROR) must be evenly divisible by the number of private subnets ()."
+  #   }
+  # }
 }
 
 data "aws_vpc" "requester" {
-  id       = var.requester_vpc_id
   provider = aws.requester
+
+  id       = var.requester_vpc_id
 }
 
 data "aws_route_tables" "requester" {
-  vpc_id   = var.requester_vpc_id
   provider = aws.requester
+
+  vpc_id   = var.requester_vpc_id
+  # lifecycle {
+  #   precondition {
+  #     condition     = var.requester_route_tables_ids == []
+  #     error_message = "The number of instances (ERROR) must be evenly divisible by the number of private subnets ()."
+  #   }
+  # }
 }
 
 #### peering configuration ####
@@ -35,9 +50,8 @@ output "accpeter_vpc" {
   value = data.aws_vpc.accepter.*
 }
 
-
 output "accpeter_rt" {
-  value = data.aws_route_tables.accepter.*
+  value = data.aws_route_tables.accepter.ids
 }
 
 
@@ -47,5 +61,5 @@ output "requester_vpc" {
 
 
 output "requester_rt" {
-  value = data.aws_route_tables.accepter.*
+  value = data.aws_route_tables.accepter.ids
 }

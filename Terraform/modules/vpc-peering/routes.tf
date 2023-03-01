@@ -15,13 +15,13 @@ resource "aws_route" "requester" {
   vpc_peering_connection_id = aws_vpc_peering_connection.this.id
   provider                  = aws.requester
 
-  # depends_on = [data.aws_route_tables.requester]
-  lifecycle {
-    precondition {
-      condition     = data.aws_route_tables.requester != null
-      error_message = "The number of instances (ERROR) must be evenly divisible by the number of private subnets ()."
-    }
-  }
+  depends_on = [data.aws_route_tables.requester]
+  # lifecycle {
+  #   precondition {
+  #     condition     = data.aws_route_tables.requester != null
+  #     error_message = "The number of instances (ERROR) must be evenly divisible by the number of private subnets ()."
+  #   }
+  # }
 }
 
 resource "aws_route" "accepter" {
@@ -31,11 +31,11 @@ resource "aws_route" "accepter" {
   vpc_peering_connection_id = aws_vpc_peering_connection.this.id
   provider                  = aws.accepter
 
-  # depends_on = [data.aws_route_tables.accepter]
-  lifecycle {
-    precondition {
-      condition     = data.aws_route_tables.accepter != null
-      error_message = "The number of instances (ERROR) must be evenly divisible by the number of private subnets ()."
-    }
-  }
+  depends_on = [data.aws_route_tables.accepter]
+  # lifecycle {
+  #   precondition {
+  #     condition     = data.aws_route_tables.accepter != null
+  #     error_message = "The number of instances (ERROR) must be evenly divisible by the number of private subnets ()."
+  #   }
+  # }
 }
