@@ -72,5 +72,4 @@ locals {
   merged_tags = merge(local.computed_tags, local.client_tags, var.extra_tags)
 }
 
-
 ##### Changes ####
