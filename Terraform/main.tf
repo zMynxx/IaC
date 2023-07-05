@@ -30,13 +30,18 @@ module "VPCPeering" {
 
   source = "./modules/vpc-peering"
 
+  # accepter
   accpeter_vpc_id  = "vpc-0111a97a9ba2c8949"
   accepter_region  = module.OpenVPN.region.id
+  # accepter_route_tables_ids  = data.aws_route_tables.accepter.ids
+
+  # requester
   requester_vpc_id = module.OpenVPN.vpc.id
   requester_region = module.OpenVPN.region.id
+  requester_route_tables_ids = [module.OpenVPN.route_table.id]
   tags             = merge(local.merged_tags, { Objective = "VPC Peering" })
 
-  depends_on = [module.OpenVPN]
+  #depends_on = [module.OpenVPN]
 }
 
 ############
@@ -71,5 +76,3 @@ locals {
   # }
   merged_tags = merge(local.computed_tags, local.client_tags, var.extra_tags)
 }
-
-##### Changes ####

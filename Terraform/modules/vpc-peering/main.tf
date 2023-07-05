@@ -21,11 +21,11 @@
 ############################
 # Taken from: https://awstip.com/aws-multi-region-vpc-peering-using-terraform-a0b8aabf084b
 resource "aws_vpc_peering_connection" "this" {
+  provider    = aws.requester
   vpc_id      = var.requester_vpc_id
   peer_vpc_id = var.accpeter_vpc_id
   peer_region = var.accepter_region
   auto_accept = false
-  provider    = aws.requester
   tags        = merge(var.tags, { Side = "Requester" })
 }
 
@@ -37,22 +37,24 @@ resource "aws_vpc_peering_connection_accepter" "this" {
 }
 
 resource "aws_vpc_peering_connection_options" "accepter_peering_options" {
+  provider = aws.accepter
   vpc_peering_connection_id = aws_vpc_peering_connection.this.id
+
   accepter {
     allow_remote_vpc_dns_resolution = true
   }
-  provider = aws.accepter
 }
 
 resource "aws_vpc_peering_connection_options" "requester_peering_options" {
+  provider = aws.requester
   vpc_peering_connection_id = aws_vpc_peering_connection.this.id
+
   requester {
     allow_remote_vpc_dns_resolution = true
   }
-  provider = aws.requester
 }
 
 locals {
-  requester_route_tables_ids = data.aws_route_tables.requester.ids
-  accepter_route_tables_ids  = data.aws_route_tables.accepter.ids
+  requester_route_tables_ids = length(var.requester_route_tables_ids) > 0 ? var.requester_route_tables_ids : data.aws_route_tables.requester.ids
+  accepter_route_tables_ids  = length(var.accepter_route_tables_ids) > 0 ? var.accepter_route_tables_ids : data.aws_route_tables.accepter.ids
 }
