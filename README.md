@@ -1,5 +1,6 @@
 # IaC
 Repo for Infrastructure as Code projects and items.
+```
 .
 ├── README.md
 └── Terraform
@@ -25,3 +26,4 @@ Repo for Infrastructure as Code projects and items.
         └── test.vsl-labs.tfvars
 
 6 directories, 16 files
+```
